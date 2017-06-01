@@ -1,0 +1,13 @@
+body{
+    background: white;
+    height: 100px;
+}
+
+td:first-of-type, td:first-of-type > div {
+    height: 200px;
+    width: 250px;
+}
+
+.col-lg-6 {
+    height: 200px;
+}

@@ -5,22 +5,14 @@ var map;
 class GoogleMap extends Component {
     componentDidMount() {
         map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 12,
+            zoom: 15,
             center: {
-                lat: this.props.lat,
-                lng: this.props.lon
+                //Taipei Train Station
+                lat: 25.0477,
+                lng: 121.5170
             }
         });
-        new google.maps.Marker({
-            position:{
-                lat: this.props.lat,
-                lng: this.props.lon
-            },
-            map: map,
-            title: "location"
-        })
     }
-    
     render() {
         return <div id="map"/>;
     }

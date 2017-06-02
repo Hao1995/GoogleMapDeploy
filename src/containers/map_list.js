@@ -5,12 +5,22 @@ import GoogleMap from "../components/google_map";
 var currentLoc,marker,map;
 
 class MapList extends Component {
-    renderTest(cityData) {
-        const name = cityData.city.name;
-        const { lon, lat } = cityData.city.coord;
-        return (
-            <GoogleMap lon={lon} lat={lat} />
-        );
+    // renderTest(cityData) {
+    //     const name = cityData.city.name;
+    //     const { lon, lat } = cityData.city.coord;
+    //     console.log("renderTest inside")
+    //     return (
+    //         <GoogleMap lon={lon} lat={lat} />
+    //     );
+    // }
+    
+    constructor(props){
+        super(props);
+        
+        this.state = { 
+            lat: 30,
+            lng: 30
+        };
     }
     
     //Current location click event
@@ -21,9 +31,10 @@ class MapList extends Component {
           navigator.geolocation.getCurrentPosition(function(position) { 
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
-            console.log("lat:"+lat+", lng:"+lng);
-            // currentLoc = new google.maps.LatLng(lat, lng);
-    
+            
+            
+            currentLoc = new google.maps.LatLng(lat, lng);
+            console.log("currentLoc = " + currentLoc);
             // //Remove previously added marker
             // if (marker) {
             //   marker.setMap(null);
@@ -50,13 +61,14 @@ class MapList extends Component {
         else {
           alert('This Browser doesn\'t support HTML5 geolocation');
         }
-      }
+    }
+      
     render() {
         return (
             <div className="row">
-                <button className="btn btn-default" onClick={this.getCurrentLocation}>Current Location</button>
                 <div id="mapList" className="col-lg-12">
-                    {this.props.weather.map(this.renderTest)}
+                    <button className="btn btn-default" onClick={this.getCurrentLocation}>Current Location</button>
+                    <GoogleMap lon={this.state.lat} lat={this.state.lng} />
                 </div>
             </div>
         );

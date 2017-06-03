@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Button, ButtonGroup, DropdownButton, MenuItem, SplitButton, ButtonToolbar, Col } from 'react-bootstrap';
 import { map } from "../components/google_map";
 
-var currentLoc,marker;
+var currentLoc, marker, endLocKey=0;
 
-const endLoc = [
+const dropList = [
     {
         name:"台北火車站",
         lat:25.048002, 
@@ -46,7 +46,7 @@ function getCurrentLocation() {
 
         map.setCenter(currentLoc);//Set the map to center of location
         console.log("Your location : " + currentLoc);
-        
+            
         marker = new google.maps.Marker({
             map: map,
             zoom: 15,
@@ -59,30 +59,74 @@ function getCurrentLocation() {
     else {
       alert('This Browser doesn\'t support HTML5 geolocation');
     }
-}
     
+    
+}
+
+function calculateAndDisplayRoute(startLoc, endLoc, directionsDisplay, directionsService, map) {
+    // Retrieve the start and end locations and create a DirectionsRequest using WALKING directions.
+    
+    directionsService.route({
+      origin: startLoc,
+      destination: endLoc,
+      travelMode: 'WALKING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
+}
+
+function test(){
+    // Instantiate a directions service.
+    var directionsService = new google.maps.DirectionsService;
+    
+    // Create a renderer for directions and bind it to the map.
+    var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
+    
+    const startLoc = map.center;
+    const endLoc = new google.maps.LatLng(dropList[endLocKey].lat, dropList[endLocKey].lng);
+    console.log("nowLoc : " + startLoc);
+    console.log("endLoc : " + endLoc);
+    
+    // Display the route between the initial start and end selections.
+    calculateAndDisplayRoute( startLoc, endLoc, 
+        directionsDisplay, directionsService, map);
+    // Listen to change events from the start and end lists.
+    var onChangeHandler = function() {
+      calculateAndDisplayRoute( startLoc, endLoc,
+          directionsDisplay, directionsService, map);
+    };
+}
+
 class Dropdown extends Component {
     constructor(props){
         super(props);
         const index = 0;
         this.state = { 
             key: index,
-            name: endLoc[index].name 
+            name: dropList[index].name 
         };
         
         this.dropSelect = this.dropSelect.bind(this);
+        // this.test = this.test.bind(this);
     }
     
     dropSelect(index){
-        const place = endLoc[index];
+        const place = dropList[index];
         
         this.setState({
             key: index, 
             name: place.name
         });
         
+        endLocKey = index;
+        
         console.log("The place you choose : "+place.name+" "+place.lat+", "+place.lng);
     }
+    
     
     render() {
         return(
@@ -92,15 +136,14 @@ class Dropdown extends Component {
                 </Col>
                 <Col lg={10} md={9} xs={7}>
                     <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.dropSelect}>
-                      <MenuItem className="item" eventKey="0">{endLoc[0].name}</MenuItem>
-                      <MenuItem className="item" eventKey="1">{endLoc[1].name}</MenuItem>
-                      <MenuItem className="item" eventKey="2">{endLoc[2].name}</MenuItem>
+                      <MenuItem className="item" eventKey="0">{dropList[0].name}</MenuItem>
+                      <MenuItem className="item" eventKey="1">{dropList[1].name}</MenuItem>
+                      <MenuItem className="item" eventKey="2">{dropList[2].name}</MenuItem>
                     </SplitButton>
                 </Col>
-                <Button bsStyle="danger" onClick={this.test}>Get Location</Button>
+                <Button bsStyle="danger" onClick={test}>Route</Button>
             </div>
         )
     }
 }
-
 export default Dropdown;

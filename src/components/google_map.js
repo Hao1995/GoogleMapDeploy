@@ -50,8 +50,8 @@ class GoogleMap extends Component {
             zoom: 15,
             center: {
                 //Taipei Train Station
-                lat: 25.0477,
-                lng: 121.5170
+                lat:25.048002, 
+                lng:121.517054
             }
         });
         markerTaxi();

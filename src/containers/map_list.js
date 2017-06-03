@@ -8,6 +8,7 @@ var currentLoc,marker;
 class MapList extends Component {
     //Current location click event
     getCurrentLocation() {
+        console.log("Execute getCurrentLocation");
         //If brower supports HTML5 geoLocation
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) { 
@@ -15,7 +16,6 @@ class MapList extends Component {
             var lng = position.coords.longitude;
             
             currentLoc = new google.maps.LatLng(lat, lng);
-            // console.log("currentLoc = " + currentLoc);
             
             //Remove previously added marker
             if (marker) {
@@ -30,7 +30,9 @@ class MapList extends Component {
             });
     
             map.setCenter(currentLoc);//Set the map to center of location
-    
+            console.log("CurrentLoc: " + currentLoc);
+            // var currentLoc = new google.maps.LatLng(25.0477, 121.5170);
+            
             marker = new google.maps.Marker({
                 map: map,
                 zoom: 15,
@@ -39,13 +41,15 @@ class MapList extends Component {
     
             infowindow.open(map,marker);
           });
-            
         }
         else {
           alert('This Browser doesn\'t support HTML5 geolocation');
         }
     }
-      
+    test(){
+        console.log("test");
+    }
+    
     render() {
         return (
             <div className="row">

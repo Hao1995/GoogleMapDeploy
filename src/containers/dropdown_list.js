@@ -4,9 +4,26 @@ import { map } from "../components/google_map";
 
 var currentLoc,marker;
 
+const endLoc = [
+    {
+        name:"台北火車站",
+        lat:25.048002, 
+        lng:121.517054
+    },
+    {
+        name:"淡水捷運站",
+        lat:25.167964,  
+        lng:121.445677
+    },
+    {
+        name:"中正紀念堂",
+        lat:25.036454, 
+        lng:121.518663
+    }
+]
+
 //Current location click event
 function getCurrentLocation() {
-    console.log("Execute getCurrentLocation");
     //If brower supports HTML5 geoLocation
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) { 
@@ -28,7 +45,7 @@ function getCurrentLocation() {
         });
 
         map.setCenter(currentLoc);//Set the map to center of location
-        console.log("CurrentLoc: " + currentLoc);
+        console.log("Your location : " + currentLoc);
         
         marker = new google.maps.Marker({
             map: map,
@@ -44,8 +61,28 @@ function getCurrentLocation() {
     }
 }
     
-    
 class Dropdown extends Component {
+    constructor(props){
+        super(props);
+        const index = 0;
+        this.state = { 
+            key: index,
+            name: endLoc[index].name 
+        };
+        
+        this.dropSelect = this.dropSelect.bind(this);
+    }
+    
+    dropSelect(index){
+        const place = endLoc[index];
+        
+        this.setState({
+            key: index, 
+            name: place.name
+        });
+        
+        console.log("The place you choose : "+place.name+" "+place.lat+", "+place.lng);
+    }
     
     render() {
         return(
@@ -54,12 +91,13 @@ class Dropdown extends Component {
                     <Button bsStyle="primary" onClick={getCurrentLocation}>My Location</Button>
                 </Col>
                 <Col lg={10} md={9} xs={7}>
-                    <SplitButton bsStyle="info" title="Destination" id={`split-button-basic-3`}>
-                      <MenuItem eventKey="1">台北火車站</MenuItem>
-                      <MenuItem eventKey="2">淡水捷運站</MenuItem>
-                      <MenuItem eventKey="3">中正紀念堂</MenuItem>
+                    <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.dropSelect}>
+                      <MenuItem className="item" eventKey="0">{endLoc[0].name}</MenuItem>
+                      <MenuItem className="item" eventKey="1">{endLoc[1].name}</MenuItem>
+                      <MenuItem className="item" eventKey="2">{endLoc[2].name}</MenuItem>
                     </SplitButton>
                 </Col>
+                <Button bsStyle="danger" onClick={this.test}>Get Location</Button>
             </div>
         )
     }

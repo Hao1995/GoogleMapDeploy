@@ -1,28 +1,11 @@
 import React, { Component } from "react";
-import { Button, MenuItem, SplitButton,  Col, Row } from 'react-bootstrap';
+import { Button, MenuItem, SplitButton,  Col } from 'react-bootstrap';
 import { map, test } from "../components/google_map";
+import { menuItem } from "../data/menu_item";
 
 var currentLoc, marker;
 var endLocKey=0, nowLoc;
 var directionsService, directionsDisplay, startLoc, endLoc, dirFlag = false;
-
-const dropList = [
-    {
-        name:"台北火車站",
-        lat:25.048002, 
-        lng:121.517054
-    },
-    {
-        name:"淡水捷運站",
-        lat:25.167964,  
-        lng:121.445677
-    },
-    {
-        name:"中正紀念堂",
-        lat:25.036454, 
-        lng:121.518663
-    }
-]
 
 //Current location click event
 function getCurrentLocation() {
@@ -31,31 +14,20 @@ function getCurrentLocation() {
       navigator.geolocation.getCurrentPosition(function(position) { 
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
-        
         currentLoc = new google.maps.LatLng(lat, lng);
-        
-        //Remove previously added marker
-        if (marker) {
-          marker.setMap(null);
-        }
-
         var popupContent = '<div id="content"><h3 id="firstHeading" >Your location is found ...</h3></div>'
-
         //Information Window
         var infowindow = new google.maps.InfoWindow({
           content: popupContent
         });
-
         map.setCenter(currentLoc);//Set the map to center of location
         console.log("Your location : " + currentLoc);
         nowLoc = map.center;//Set the "nowLoc" to center of map
-        
         marker = new google.maps.Marker({
             map: map,
             zoom: 15,
             position: currentLoc
         });
-
         infowindow.open(map,marker);
       });
     }
@@ -81,32 +53,21 @@ function displayRoute(startLoc, endLoc, directionsDisplay, directionsService, ma
 
 function dirRoute(){
     // If it's first "direction", initial "directionsService" & "directionDisplay"
-    test();
     if(!dirFlag){
-        // Instantiate a directions service.
         directionsService = new google.maps.DirectionsService;
-        
-        // Create a renderer for directions and bind it to the map.
         directionsDisplay = new google.maps.DirectionsRenderer({map: map});
-    
-        // Set "map.center" to the initial value of startLoc & nowLoc 
-        startLoc = nowLoc = map.center;
-        
+        // startLoc = nowLoc = map.center;
         dirFlag = true;
     }else{
         startLoc = nowLoc;
     }
     
-    endLoc = new google.maps.LatLng(dropList[endLocKey].lat, dropList[endLocKey].lng);//Set endLoc to value specified by us 
-
-    console.log("nowLoc : " + startLoc);
-    console.log("endLoc : " + endLoc);
+    endLoc = new google.maps.LatLng(menuItem[endLocKey].lat, menuItem[endLocKey].lng);//Set endLoc to value specified by us 
+    console.log("startLoc : " + startLoc + ", endLoc : " + endLoc);
     
     // Display the route between the initial start and end selections.
     displayRoute( startLoc, endLoc, 
         directionsDisplay, directionsService, map);
-        
-    console.log("completed dirRoute");
 }
 
 class Dropdown extends Component {
@@ -115,40 +76,48 @@ class Dropdown extends Component {
         const index = 0;
         this.state = { 
             key: index,
-            name: dropList[index].name 
+            name: menuItem[index].name 
         };
-        
-        this.dropSelect = this.dropSelect.bind(this);
+        this.menuSelect = this.menuSelect.bind(this);
+    }
+    componentDidMount(map){
+        // startLoc=nowLoc=map.center;
+        console.log(map);
     }
     
-    dropSelect(index){
-        const place = dropList[index];
-        
+    menuSelect(index){
+        const place = menuItem[index];
         this.setState({
             key: index, 
             name: place.name
         });
-        
         endLocKey = index;
-        
         console.log("The place you choose : "+place.name+" "+place.lat+", "+place.lng);
+    }
+    
+    renderMenu(data){
+        const name = data.name;
+        const id = data.id;
+        return(
+            <MenuItem key={id} className="item" eventKey={id}>{name}</MenuItem>    
+        );
     }
     
     render() {
         return(
             <div>
-                <Col lg={2} md={3} xs={12} className="item">
-                    <Button bsStyle="primary" onClick={getCurrentLocation}>My Location</Button>
-                </Col>
-                <Col lg={3} md={4} xs={12} className="item">
-                    <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.dropSelect}>
-                      <MenuItem className="item" eventKey="0">{dropList[0].name}</MenuItem>
-                      <MenuItem className="item" eventKey="1">{dropList[1].name}</MenuItem>
-                      <MenuItem className="item" eventKey="2">{dropList[2].name}</MenuItem>
-                    </SplitButton>
-                </Col>
-                <Col lg={2} md={4} xs={12} className="item">
-                    <Button bsStyle="danger" onClick={dirRoute}>Route</Button>
+                <Col lg={12} md={12} xs={12}>
+                    <Col lg={2} md={3} xs={12} className="row">
+                        <Button bsStyle="primary" onClick={getCurrentLocation}>My Location</Button>
+                    </Col>
+                    <Col lg={3} md={4} xs={12} className="row">
+                        <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.menuSelect}>
+                            {menuItem.map(this.renderMenu)}
+                        </SplitButton>
+                    </Col>
+                    <Col lg={2} md={4} xs={12} className="row">
+                        <Button bsStyle="danger" onClick={dirRoute}>Route</Button>
+                    </Col>
                 </Col>
             </div>
         )

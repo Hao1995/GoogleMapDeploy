@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Col } from "react-bootstrap";
 import GoogleMap from "../components/google_map";
-import { map } from "../components/google_map"
 
 class MapList extends Component {
     
@@ -15,8 +13,4 @@ class MapList extends Component {
     }
 }
 
-function mapStateToProps({ weather }){
-    return { weather };
-}
-
-export default connect(mapStateToProps)(MapList);
+export default MapList;

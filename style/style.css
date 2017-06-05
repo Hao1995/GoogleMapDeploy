@@ -20,6 +20,10 @@ td:first-of-type, td:first-of-type > div {
     margin: 10px 0;
 }
 
-.item {
+.row {
     margin: 5px 0;
+}
+
+.item {
+    padding: 0 20px;
 }

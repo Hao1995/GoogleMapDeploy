@@ -1,22 +1,20 @@
+# GoogleMap Route
+Based on React-Redux, use google map api to make a google map route application.
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+![GoogleMap Route](https://github.com/Hao1995/react-google-maps/blob/master/google-maps.gif "GoogleMap Route")
 
+1. React-Redux
+2. react-bootstrap
+3. GoogleMap API
+   - Map
+   - Marker
+   - InfoWindow
+   - DirectionsService
+   - DirectionsRenderer
+3. geolocation
 
-Welcome to your Node.js project on Cloud9 IDE!
-
-This chat example showcases how to use `socket.io` with a static `express` server.
-
-## Running the server
-
-1) Open `server.js` and start the app by clicking on the "Run" button in the top menu.
-
-2) Alternatively you can launch the app from the Terminal:
-
-    $ node server.js
-
-Once the server is running, open the project in the shape of 'https://projectname-username.c9users.io/'. As you enter your name, watch the Users list (on the left) update. Once you press Enter or Send, the message is shared with all connected clients.
+Web
+```
+  > git clone git@github.com:Hao1995/react-google-maps.git
+  > npm start
+```

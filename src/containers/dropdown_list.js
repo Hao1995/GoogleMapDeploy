@@ -56,7 +56,7 @@ function dirRoute(){
     if(!dirFlag){
         directionsService = new google.maps.DirectionsService;
         directionsDisplay = new google.maps.DirectionsRenderer({map: map});
-        // startLoc = nowLoc = map.center;
+        startLoc = nowLoc = map.center;
         dirFlag = true;
     }else{
         startLoc = nowLoc;
@@ -80,11 +80,6 @@ class Dropdown extends Component {
         };
         this.menuSelect = this.menuSelect.bind(this);
     }
-    componentDidMount(map){
-        // startLoc=nowLoc=map.center;
-        console.log(map);
-    }
-    
     menuSelect(index){
         const place = menuItem[index];
         this.setState({

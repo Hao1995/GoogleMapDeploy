@@ -17,9 +17,9 @@ td:first-of-type, td:first-of-type > div {
 }
 
 .show-grid{
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .item {
-    padding: 0 10px;
+    margin: 5px 0;
 }

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Button, ButtonGroup, DropdownButton, MenuItem, SplitButton, ButtonToolbar, Col } from 'react-bootstrap';
+import { Button, MenuItem, SplitButton,  Col, Row } from 'react-bootstrap';
 import { map } from "../components/google_map";
 
-var currentLoc, marker, endLocKey=0;
+var currentLoc, marker;
+var endLocKey=0, nowLoc;
+var directionsService, directionsDisplay, startLoc, endLoc, dirFlag = false;
 
 const dropList = [
     {
@@ -46,7 +48,8 @@ function getCurrentLocation() {
 
         map.setCenter(currentLoc);//Set the map to center of location
         console.log("Your location : " + currentLoc);
-            
+        nowLoc = map.center;//Set the "nowLoc" to center of map
+        
         marker = new google.maps.Marker({
             map: map,
             zoom: 15,
@@ -59,13 +62,10 @@ function getCurrentLocation() {
     else {
       alert('This Browser doesn\'t support HTML5 geolocation');
     }
-    
-    
 }
 
 function calculateAndDisplayRoute(startLoc, endLoc, directionsDisplay, directionsService, map) {
     // Retrieve the start and end locations and create a DirectionsRequest using WALKING directions.
-    
     directionsService.route({
       origin: startLoc,
       destination: endLoc,
@@ -79,26 +79,31 @@ function calculateAndDisplayRoute(startLoc, endLoc, directionsDisplay, direction
     });
 }
 
-function test(){
-    // Instantiate a directions service.
-    var directionsService = new google.maps.DirectionsService;
+function dirRoute(){
+    // If it's first "direction", initial "directionsService" & "directionDisplay"
+    if(!dirFlag){
+        // Instantiate a directions service.
+        directionsService = new google.maps.DirectionsService;
+        
+        // Create a renderer for directions and bind it to the map.
+        directionsDisplay = new google.maps.DirectionsRenderer({map: map});
     
-    // Create a renderer for directions and bind it to the map.
-    var directionsDisplay = new google.maps.DirectionsRenderer({map: map});
+        // Set "map.center" to the initial value of startLoc & nowLoc 
+        startLoc = nowLoc = map.center;
+        
+        dirFlag = true;
+    }else{
+        startLoc = nowLoc;
+    }
     
-    const startLoc = map.center;
-    const endLoc = new google.maps.LatLng(dropList[endLocKey].lat, dropList[endLocKey].lng);
+    endLoc = new google.maps.LatLng(dropList[endLocKey].lat, dropList[endLocKey].lng);//Set endLoc to value specified by us 
+
     console.log("nowLoc : " + startLoc);
     console.log("endLoc : " + endLoc);
     
     // Display the route between the initial start and end selections.
     calculateAndDisplayRoute( startLoc, endLoc, 
         directionsDisplay, directionsService, map);
-    // Listen to change events from the start and end lists.
-    var onChangeHandler = function() {
-      calculateAndDisplayRoute( startLoc, endLoc,
-          directionsDisplay, directionsService, map);
-    };
 }
 
 class Dropdown extends Component {
@@ -127,21 +132,22 @@ class Dropdown extends Component {
         console.log("The place you choose : "+place.name+" "+place.lat+", "+place.lng);
     }
     
-    
     render() {
         return(
             <div>
-                <Col lg={2} md={3} xs={5}>
+                <Col lg={2} md={3} xs={12} className="item">
                     <Button bsStyle="primary" onClick={getCurrentLocation}>My Location</Button>
                 </Col>
-                <Col lg={10} md={9} xs={7}>
+                <Col lg={3} md={4} xs={12} className="item">
                     <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.dropSelect}>
                       <MenuItem className="item" eventKey="0">{dropList[0].name}</MenuItem>
                       <MenuItem className="item" eventKey="1">{dropList[1].name}</MenuItem>
                       <MenuItem className="item" eventKey="2">{dropList[2].name}</MenuItem>
                     </SplitButton>
                 </Col>
-                <Button bsStyle="danger" onClick={test}>Route</Button>
+                <Col lg={2} md={4} xs={12} className="item">
+                    <Button bsStyle="danger" onClick={dirRoute}>Route</Button>
+                </Col>
             </div>
         )
     }

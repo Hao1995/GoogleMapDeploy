@@ -1,7 +1,7 @@
 # GoogleMap Route
 Based on React-Redux, use google map api to make a google map route application.
 
-![GoogleMap Route](https://github.com/Hao1995/react-google-maps/blob/master/google-maps.gif "GoogleMap Route")
+![GoogleMap Route](https://github.com/Hao1995/Google-Maps/blob/master/google-maps.gif "GoogleMap Route")
 
 1. React-Redux
 2. react-bootstrap

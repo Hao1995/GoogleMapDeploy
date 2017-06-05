@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, MenuItem, SplitButton,  Col, Row } from 'react-bootstrap';
-import { map } from "../components/google_map";
+import { map, test } from "../components/google_map";
 
 var currentLoc, marker;
 var endLocKey=0, nowLoc;
@@ -64,7 +64,7 @@ function getCurrentLocation() {
     }
 }
 
-function calculateAndDisplayRoute(startLoc, endLoc, directionsDisplay, directionsService, map) {
+function displayRoute(startLoc, endLoc, directionsDisplay, directionsService, map) {
     // Retrieve the start and end locations and create a DirectionsRequest using WALKING directions.
     directionsService.route({
       origin: startLoc,
@@ -81,6 +81,7 @@ function calculateAndDisplayRoute(startLoc, endLoc, directionsDisplay, direction
 
 function dirRoute(){
     // If it's first "direction", initial "directionsService" & "directionDisplay"
+    test();
     if(!dirFlag){
         // Instantiate a directions service.
         directionsService = new google.maps.DirectionsService;
@@ -102,8 +103,10 @@ function dirRoute(){
     console.log("endLoc : " + endLoc);
     
     // Display the route between the initial start and end selections.
-    calculateAndDisplayRoute( startLoc, endLoc, 
+    displayRoute( startLoc, endLoc, 
         directionsDisplay, directionsService, map);
+        
+    console.log("completed dirRoute");
 }
 
 class Dropdown extends Component {
@@ -116,7 +119,6 @@ class Dropdown extends Component {
         };
         
         this.dropSelect = this.dropSelect.bind(this);
-        // this.test = this.test.bind(this);
     }
     
     dropSelect(index){

@@ -1,4 +1,12 @@
-import axios from "axios";
+// import axios from "axios";
+import { destinations } from "../data/destinations";
 
-export function fetchWeather(city){
+export const FETCH_DESTINATIONS = "FETCH_DESTINATIONS";
+
+export function fetchDestinations(){
+    console.log("fetchDestinations ...");
+    return{
+        type: FETCH_DESTINATIONS,
+        payload: destinations
+    };
 }

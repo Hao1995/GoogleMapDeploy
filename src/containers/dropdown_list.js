@@ -1,8 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import { Button, MenuItem, SplitButton,  Col } from 'react-bootstrap';
 import { map, test } from "../components/google_map";
-import { menuItem } from "../data/menu_item";
+import { fetchDestinations } from "../actions/index";
 
+var menuItem,initialIdx=0;
+var destinationsFlag = false; 
 var currentLoc, marker;
 var endLocKey=0, nowLoc;
 var directionsService, directionsDisplay, startLoc, endLoc, dirFlag = false;
@@ -52,6 +57,9 @@ function displayRoute(startLoc, endLoc, directionsDisplay, directionsService, ma
 }
 
 function dirRoute(){
+    console.log("dirRoute...");
+    console.log(menuItem);
+    
     // If it's first "direction", initial "directionsService" & "directionDisplay"
     if(!dirFlag){
         directionsService = new google.maps.DirectionsService;
@@ -73,15 +81,34 @@ function dirRoute(){
 class Dropdown extends Component {
     constructor(props){
         super(props);
-        const index = 0;
+        this.props.fetchDestinations();
         this.state = { 
-            key: index,
-            name: menuItem[index].name 
+            key: initialIdx,
+            name: "Loading..."
         };
+        
         this.menuSelect = this.menuSelect.bind(this);
+        this.test = this.test.bind(this);
+        this.test1 = this.test1.bind(this);
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
+    }
+    
+    componentDidUpdate(){
+        //組件更新後執行
+        if(destinationsFlag == false){
+            console.log("組件更新後 ...");
+            const place = this.props.destinations[initialIdx];
+            menuItem = this.props.destinations;
+            this.setState({
+                key:initialIdx,
+                name: place.name
+            });
+            console.log("The place you choose : "+place.name+" "+place.lat+", "+place.lng);
+            destinationsFlag = true;
+        }
     }
     menuSelect(index){
-        const place = menuItem[index];
+        const place = this.props.destinations[index];
         this.setState({
             key: index, 
             name: place.name
@@ -94,8 +121,12 @@ class Dropdown extends Component {
         const name = data.name;
         const id = data.id;
         return(
-            <MenuItem key={id} className="item" eventKey={id}>{name}</MenuItem>    
+            <MenuItem key={id} className="item" eventKey={id}>{name}</MenuItem>
         );
+    }
+    test(data){
+    }
+    test1(){
     }
     
     render() {
@@ -107,15 +138,23 @@ class Dropdown extends Component {
                     </Col>
                     <Col lg={3} md={4} xs={12} className="row">
                         <SplitButton bsStyle="info" title={this.state.name} id={`split-button`} onSelect={this.menuSelect}>
-                            {menuItem.map(this.renderMenu)}
+                            {this.props.destinations.map(this.renderMenu)}
                         </SplitButton>
                     </Col>
                     <Col lg={2} md={4} xs={12} className="row">
                         <Button bsStyle="danger" onClick={dirRoute}>Route</Button>
                     </Col>
                 </Col>
+                <button onClick={this.test1}>Test</button>
             </div>
-        )
+        );
     }
 }
-export default Dropdown;
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({ fetchDestinations }, dispatch);
+}
+function mapStateToProps({ destinations }){
+    return { destinations };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dropdown);

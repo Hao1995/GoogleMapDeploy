@@ -1,4 +1,4 @@
-export const menuItem = [
+export const destinations = [
     {
         id:0,
         name:"台北火車站",

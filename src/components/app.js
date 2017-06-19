@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { Row } from "react-bootstrap";
 
-import MapList from "../containers/map_list";
-import Dropdown from "../containers/dropdown_list";
+import Map from "../containers/map";
+import OperationBar from "../containers/operation_bar";
 
 export default class App extends Component {
   render() {
     return (
       <div>
         <Row className="show-grid">
-          <Dropdown />
+          <OperationBar />
         </Row>
         <Row className="show-grid">
-          <MapList />
+          <Map />
         </Row>
       </div>
       

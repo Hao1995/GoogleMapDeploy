@@ -10,17 +10,10 @@ class MapList extends Component {
         super(props);
         
         this.props.fetchTaxis();
-        this.test = this.test.bind(this);
-    }
-    test(){
-        this.props.fetchTaxis();
-        console.log("taxis ...");
-        // console.log(this.props.taxis);
     }
     render() {
         return (
             <div>
-                <button onClick={ this.test }>Taxis</button>
                 <Col id="mapList" lg={12} md={12} xs={12}>
                     <GoogleMap data={this.props.taxis}/>
                 </Col>

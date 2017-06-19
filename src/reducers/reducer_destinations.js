@@ -6,6 +6,5 @@ export default function(state = [], action){
             // return [action.payload.data, ...state];
             return action.payload;
     }
-    
     return state;
 }

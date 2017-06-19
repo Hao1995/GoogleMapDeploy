@@ -1,6 +1,6 @@
 //js欄位: id, 經度(longitude), 緯度(latitude), drive_id, drive_name, License_plate_number
 
-export const taxiLocation = [{
+export const taxis = [{
       id:1,
       lat:25.050631, 
       lng: 121.528555,

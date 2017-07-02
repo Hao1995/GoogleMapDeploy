@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
   entry: [
     './src/index.js'
@@ -27,3 +29,6 @@ module.exports = {
     "public": "react-google-maps-hao1995.c9users.io"
   }
 };
+new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+});

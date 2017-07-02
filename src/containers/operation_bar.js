@@ -8,6 +8,7 @@ import { fetchDestinations } from "../actions/index";
 
 let directionsService, directionsDisplay;
 let destinationsFlag = false;
+let currentMarker;
 
 class OperationBar extends Component {
     constructor(props){
@@ -58,12 +59,12 @@ class OperationBar extends Component {
             this.setState({startLoc: map.center});
             console.log("Your location : " + currentLoc);
             
-            const marker = new google.maps.Marker({
+            currentMarker = new google.maps.Marker({
                 map: map,
                 zoom: 15,
                 position: currentLoc
             });
-            infowindow.open(map,marker);
+            infowindow.open(map,currentMarker);
           });
         }
         else {
@@ -100,6 +101,11 @@ class OperationBar extends Component {
         const endLoc = new google.maps.LatLng(lat, lng);//Set endLoc to value specified by us 
         console.log("startLoc : " + startLoc + ", endLoc : " + endLoc);
         
+        if(currentMarker != null){
+            currentMarker.setMap(null);
+            currentMarker = null;
+        }
+        
         // Retrieve the start and end locations and create a DirectionsRequest using WALKING directions.
         directionsService.route({
             origin: startLoc,
@@ -113,7 +119,7 @@ class OperationBar extends Component {
             }
         });
     }
-    
+      
     render() {
         return(
             <div>

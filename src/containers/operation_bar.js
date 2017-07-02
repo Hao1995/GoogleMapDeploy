@@ -30,7 +30,9 @@ class OperationBar extends Component {
     
     componentDidUpdate(){
         //組件更新後執行
+        
         if(destinationsFlag == false){
+            console.log("flag ... ",destinationsFlag);
             this.menuSelect(this.state.key);
             
             directionsService = new google.maps.DirectionsService;

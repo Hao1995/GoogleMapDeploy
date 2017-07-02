@@ -1,4 +1,3 @@
-// import axios from "axios";
 import { destinations } from "../data/destinations";
 import { taxis } from "../data/taxi_location";
 

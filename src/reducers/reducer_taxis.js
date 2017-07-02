@@ -1,6 +1,6 @@
 import { FETCH_TAXIS } from "../actions/index";
 
-export default function(state = [], action){
+export default (state = [], action) => {
     switch(action.type) {
         case FETCH_TAXIS:
             return action.payload;

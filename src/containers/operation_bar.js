@@ -6,8 +6,8 @@ import { Button, MenuItem, SplitButton,  Col } from 'react-bootstrap';
 import { map } from "../components/google_map";
 import { fetchDestinations } from "../actions/index";
 
-var directionsService, directionsDisplay;
-var destinationsFlag = false;
+let directionsService, directionsDisplay;
+let destinationsFlag = false;
 
 class OperationBar extends Component {
     constructor(props){
@@ -25,7 +25,6 @@ class OperationBar extends Component {
         this.componentDidUpdate = this.componentDidUpdate.bind(this);
         this.getCurrentLocation = this.getCurrentLocation.bind(this);
         this.dirRoute = this.dirRoute.bind(this);
-        this.test1 = this.test1.bind(this);
     }
     
     componentDidUpdate(){
@@ -41,26 +40,6 @@ class OperationBar extends Component {
         }
     }
     
-    menuSelect(index){
-        console.log("menuSelect");
-        if(this.props.destinations.length > 0){
-            const destination = this.props.destinations[index];
-            this.setState({
-                key: index, 
-                name: destination.name
-            });
-            console.log("The destination you choose : "+destination.name+" "+destination.lat+", "+destination.lng); 
-        }
-    }
-    
-    renderMenu(data){
-        const name = data.name;
-        const id = data.id;
-        return(
-            <MenuItem key={id} className="item" eventKey={id}>{name}</MenuItem>
-        );
-    }
-    
     getCurrentLocation(){
         //If brower supports HTML5 geoLocation
         if (navigator.geolocation) {
@@ -68,7 +47,7 @@ class OperationBar extends Component {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             const currentLoc = new google.maps.LatLng(lat, lng);
-            const popupContent = '<div id="content"><h3 id="firstHeading" >Your location is found ...</h3></div>'
+            const popupContent = '<div id="content"><h3 id="firstHeading" >Your location is found ...</h3></div>';
             
             //Information Window
             const infowindow = new google.maps.InfoWindow({
@@ -90,6 +69,26 @@ class OperationBar extends Component {
         else {
           alert('This Browser doesn\'t support HTML5 geolocation');
         }
+    }
+    
+    menuSelect(index){
+        console.log("menuSelect");
+        if(this.props.destinations.length > 0){
+            const destination = this.props.destinations[index];
+            this.setState({
+                key: index, 
+                name: destination.name
+            });
+            console.log("The destination you choose : "+destination.name+" "+destination.lat+", "+destination.lng); 
+        }
+    }
+    
+    renderMenu(data){
+        const name = data.name;
+        const id = data.id;
+        return(
+            <MenuItem key={id} className="item" eventKey={id}>{name}</MenuItem>
+        );
     }
     
     dirRoute(){
@@ -115,10 +114,6 @@ class OperationBar extends Component {
         });
     }
     
-    test1(){
-        console.log(this.state);
-    }
-    
     render() {
         return(
             <div>
@@ -135,11 +130,11 @@ class OperationBar extends Component {
                         <Button bsStyle="danger" onClick={this.dirRoute}>Route</Button>
                     </Col>
                 </Col>
-                <button onClick={this.test1}>Test</button>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch){
     return bindActionCreators({ fetchDestinations }, dispatch);
 }

@@ -1,9 +1,9 @@
 import _ from "lodash"; 
 import React, { Component } from "react";
 
-const initialLat = 25.047739, initialLng = 121.517086;
+const initialLat = 25.047739, initialLng = 121.517086; //Default Taipei Train Station Location
 const iconSize = 40, iconScaled = 30, iconUrl = "https://image.flaticon.com/icons/png/128/433/433092.png";
-
+export let map;
 
 class GoogleMap extends Component {
     constructor(props){
@@ -28,7 +28,7 @@ class GoogleMap extends Component {
     }
     
     markerTaxi(){
-        const taxiLocation = this.props.data
+        const taxiLocation = this.props.data;
         const icon = {
                     url: iconUrl,
                     // size: new google.maps.Size(iconSize, iconSize), // pixel
@@ -36,18 +36,16 @@ class GoogleMap extends Component {
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(iconSize/2, iconSize/2)
                 };
-                
-        for(var i = 0; i < taxiLocation.length; i++){
-            var lat = taxiLocation[i].lat;
-            var lng = taxiLocation[i].lng;
-            var currentLoc = new google.maps.LatLng(lat, lng);
+        
+        taxiLocation.map( (data) => {
+            const currentLoc = new google.maps.LatLng(data.lat, data.lng);
             new google.maps.Marker({
                 map: map,
                 zoom: 15,
                 position: currentLoc,
                 icon: icon,
             });
-        }
+        });
     }
     
     render() {
@@ -59,6 +57,6 @@ class GoogleMap extends Component {
     }
 }
 
-export var map;
+// export var map;
 
 export default GoogleMap;
